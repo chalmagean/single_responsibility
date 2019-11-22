@@ -1,29 +1,69 @@
 class Car
   def initialize
-    @trunk = {}
-    @fuel = 0
-    @lights = false
+    @tank = Tank.new
+    @lights = Lights.new
+    @trunk = Trunk.new
   end
 
   def load_fuel(quantity)
-    if @fuel >= 10
-      puts "--- Already full ---"
-    else
-      puts "--- Loading fuel ---"
-      @fuel += quantity
-    end
+    @tank.load(quantity)
   end
 
   def check_fuel
+    @tank.check
+  end
+
+  def check_lights
+    @lights.check
+  end
+
+  def turn_on_headlights
+    @lights.on
+  end
+
+  def turn_off_headlights
+    @lights.off
+  end
+
+  def store_in_trunk(type, quantity)
+    @trunk.store(type, quantity)
+  end
+
+  def trunk_contents
+    @trunk.contents
+  end
+end
+
+class Tank
+  def initialize
+    @tank = 0
+  end
+
+  def load(quantity)
+    if @tank >= 10
+      puts "--- Already full ---"
+    else
+      puts "--- Loading fuel ---"
+      @tank += quantity
+    end
+  end
+
+  def check
     puts "--- Checking fuel ---"
-    if @fuel.positive?
-      puts "--- #{@fuel}l of gas in the tank ---"
+    if @tank.positive?
+      puts "--- #{@tank}l of gas in the tank ---"
     else
       puts "--- Tank is empty ---"
     end
   end
+end
 
-  def check_lights
+class Lights
+  def initialize
+    @lights = false
+  end
+
+  def check
     if @lights
       puts "--- Lights are on ---"
     else
@@ -31,22 +71,28 @@ class Car
     end
   end
 
-  def turn_on_headlights
+  def on
     puts "--- Turning lights on ---"
     @lights = true
   end
 
-  def turn_off_headlights
+  def off
     puts "--- Turning lights off ---"
     @lights = false
   end
+end
 
-  def store_in_trunk(type, quantity)
+class Trunk
+  def initialize
+    @trunk = {}
+  end
+
+  def store(type, quantity)
     @trunk[type] = quantity
     puts "--- Stored #{type} ---"
   end
 
-  def trunk_contents
+  def contents
     if @trunk.keys.length.positive?
       puts "--- Trunk contents ---"
       @trunk.each do |type, quantity|
